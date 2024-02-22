@@ -1,3 +1,14 @@
+# Playwright Pytest BDD Boilerplate
+
+This is a boilerplate project for setting up and running end-to-end tests using Playwright, Pytest, and the Behavior-Driven Development (BDD) approach. It utilizes the dependency injection design pattern to provide a flexible and modular testing framework.
+
+## Features
+
+- **Playwright**: A Python library for automating browsers based on the powerful Playwright toolset.
+- **Pytest**: A testing framework that makes it easy to write simple and scalable tests.
+- **Behavior-Driven Development (BDD)**: A methodology for writing tests in simple, natural language constructs, making them more accessible to non-technical stakeholders.
+- **Dependency Injection**: The project leverages the dependency injection design pattern to manage dependencies and promote code reusability and testability.
+
 ## Getting Started
 
 ### Prerequisites
