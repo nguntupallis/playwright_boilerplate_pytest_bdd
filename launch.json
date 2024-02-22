@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Run Tests",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/venv/Scripts/python.exe",
+            "console": "integratedTerminal",
+            "env": {
+                "TEST_ENVIRONMENT": "qa",
+                "HEADLESS_MODE": "false",
+                "PASSWORD": "${env:PASSWORD}",
+                "BROWSER": "chrome",
+                "RUN_TESTS": "true"
+            },
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
