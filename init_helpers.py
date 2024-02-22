@@ -14,9 +14,9 @@ def get_working_directory():
     if "api" in os.getcwd():
         working_dir = os.path.join(os.getcwd(), "../../source/")
     elif "source" in os.getcwd():
-        working_dir = os.path.join(os.getcwd(), "/")
+        working_dir = os.path.join(os.getcwd(), "")
     else:
-        working_dir = os.path.join(os.getcwd(), "source/")
+        working_dir = os.path.join(os.getcwd(), "")
     print("Working directory is : " + working_dir)
     return working_dir
 

@@ -8,7 +8,6 @@ import logging
 from init_helpers import *
 from conftest import *
 
-scenarios('../features/login.feature')
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -17,6 +16,10 @@ def generate_random_string(length=10):
     characters = string.ascii_lowercase + string.digits
     random_string = ''.join(secrets.choice(characters) for _ in range(length))
     return random_string
+
+features_directory = get_working_directory() + "features"
+
+scenarios(f'{features_directory}/login.feature')
 
 @pytest.fixture(scope='function')
 def shared_data():
