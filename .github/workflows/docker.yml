@@ -27,4 +27,4 @@ jobs:
             -p 36355:36355 \
             playwright-tests
           # Constructing URL for Allure reports
-          echo "Allure reports are being served at http://${{ github.server_url }}:36355"
+          echo "Allure reports are being served at ${{ github.server_url }}:36355"
