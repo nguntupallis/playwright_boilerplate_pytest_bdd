@@ -28,20 +28,3 @@ jobs:
             playwright-tests
           # Constructing URL for Allure reports
           echo "Allure reports are being served at ${{ github.server_url }}:36355"
-
-  ngrok:
-    runs-on: ubuntu-latest
-    needs: [build-and-test]
-    steps:
-      - name: Set up ngrok
-        uses: martinfrancois/setup-ngrok@v1
-        with:
-          authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
-
-      - name: Start ngrok
-        run: |
-          ngrok http 36355 > /dev/null &  # Start ngrok in the background
-          sleep 10  # Wait for ngrok to establish the tunnel
-
-      - name: Get ngrok URL
-        run: echo "Ngrok URL: ${{ steps.ngrok.outputs.url }}"
