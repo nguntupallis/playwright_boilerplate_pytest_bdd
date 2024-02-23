@@ -26,5 +26,12 @@ jobs:
             -e BROWSER="chrome" \
             -p 36355:36355 \
             playwright-tests
-          # Constructing URL for Allure reports
-          echo "Allure reports are being served at ${{ github.server_url }}:36355"
+          # Assuming Allure reports are generated in a directory named 'allure-results'
+          # You need to copy the generated reports to a directory accessible by GitHub Actions
+          cp -r allure-results $GITHUB_WORKSPACE/allure-results
+
+      - name: Upload Allure reports as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: allure-reports
+          path: $GITHUB_WORKSPACE/allure-results
