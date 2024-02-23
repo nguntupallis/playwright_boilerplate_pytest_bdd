@@ -26,5 +26,5 @@ jobs:
             -e BROWSER="chrome" \
             -p 36355:36355 \
             playwright-tests
-          # Print instructions for accessing the Allure reports
-          echo "Allure reports are being served at http://<CI_PIPELINE_HOST>:36355"
+          # Constructing URL for Allure reports
+          echo "Allure reports are being served at http://${{ github.server_url }}:36355"
