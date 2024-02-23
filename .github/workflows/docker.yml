@@ -1,0 +1,30 @@
+name: Run Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build the Docker image
+        run: docker build . -t playwright-tests
+
+      - name: Run tests
+        run: |
+          docker run -d \
+            -e PASSWORD="${{ secrets.PASSWORD }}" \
+            -e HEADLESS_MODE="true" \
+            -e TEST_ENVIRONMENT="qa" \
+            -e BROWSER="chrome" \
+            -p 36355:36355 \
+            playwright-tests
+          # Print instructions for accessing the Allure reports
+          echo "Allure reports are being served at http://<CI_PIPELINE_HOST>:36355"
