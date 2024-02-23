@@ -25,5 +25,4 @@ EXPOSE 36355
 
 COPY . .
 
-# ENTRYPOINT ["tox"]
-CMD ["bash"]
+ENTRYPOINT ["tox"]

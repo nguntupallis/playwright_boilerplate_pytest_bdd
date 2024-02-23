@@ -17,12 +17,12 @@ Feature: Login Feature
    Then login should succeed - <status>    
 
 Examples:
-|username               | password        | status|    
-|tomsmith-valid         | pass            | pass  | 
-|None                   | password        | fail  |
-# |tomsmith             | password        | fail  |
-# |tomsmith             | None            | fail  |
-|invalid_username       | password        | fail  |  
-# |tomsmith             | short           | fail  |  
-|long_username          | password        | fail  |  
+|username               | password        | status  |    
+|tomsmith_valid         | pass            | pass    | 
+|None                   | password        | fail    |
+# |tomsmith             | password        | fail    |
+# |tomsmith             | None            | fail    |
+|invalid_username       | password        | fail    |  
+# |tomsmith             | short           | fail    |  
+|long_username          | password        | fail    |  
 # |tomsmith           | long_password_that_exceeds_max_length           | fail  |  

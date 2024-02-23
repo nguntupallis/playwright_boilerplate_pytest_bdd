@@ -65,7 +65,7 @@ def provide_credentials(username, password, shared_data):
         enter_username(username)
         enter_password(password)
     elif "valid" in username.lower() and "invalid" not in username.lower():
-        username = username.strip("-valid")
+        username = username.strip("_valid")
         enter_username(username)
         password=config["credentials"]["password"]
         if password == "":
@@ -87,16 +87,16 @@ def verify_signin_status(status, shared_data):
     data = shared_data
     if status.lower() == "fail":
         if data['password'] == "None" and "valid" not in data["username"].lower():
-            assert check_password_is_invalid_alert_exists()
+            assert check_password_is_invalid_alert_exists() is True
             assert get_invalid_error_text() == "\n            Your password is invalid!\n            ×\n          "
         elif data['username'] == "None" and "valid" not in data["username"].lower():
-            assert check_username_is_invalid_alert_exists() 
+            assert check_username_is_invalid_alert_exists() is True
             assert get_invalid_error_text() == "\n            Your username is invalid!\n            ×\n          "      
         elif "long_username" in data['username']:
-            assert check_username_is_invalid_alert_exists()   
+            assert check_username_is_invalid_alert_exists() is True
             assert get_invalid_error_text() == "\n            Your username is invalid!\n            ×\n          "      
-        elif "valid" in data['username'] and status.lower()=="pass":
-            assert check_logout_button_exists() 
-            click_logout_button()
-        else:
-            assert check_username_is_invalid_alert_exists()
+    elif status.lower()=="pass":
+        assert check_logout_button_exists() == True
+        click_logout_button()
+    else:
+        assert check_username_is_invalid_alert_exists() is True
