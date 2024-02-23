@@ -38,14 +38,23 @@ This is a boilerplate project for setting up and running end-to-end tests using 
 
 1. Write your feature files using Gherkin syntax in the `features` directory.
 2. Implement your step definitions in the `steps` directory using Python.
-3. Provide the correct password in .env file
+3. Obtain the password from [https://the-internet.herokuapp.com/login](https://the-internet.herokuapp.com/login) and replace `YourPasswordHere` with it in the setting variables command below.
 4. Run the tests using the following command:
 
     ```bash
-    scoop install allure (for windows)
-    apt-get update && apt-get install -y allure (for linux)
+    # For Windows
+    scoop install allure
+
+    # For Linux
+    apt-get update && apt-get install -y allure
+
+    # Set the password, headless mode, test environment, and browser variables
+    $env:PASSWORD = "YourPasswordHere"; $env:HEADLESS_MODE = "false"; $env:TEST_ENVIRONMENT= "qa"; $env:BROWSER= "chrome"
+
+    # Run the tests
     tox
     ```
+
 
 ### Configuration
 
