@@ -28,10 +28,13 @@ jobs:
             -p 36355:36355 \
             playwright-tests
 
-      - name: Run tests and generate Allure report
+      - name: Get Docker container IP address
+        id: container-ip
         run: |
-          allure_output=$(docker exec playwright-tests allure serve --port 36355 ./allure-results)
+          container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' playwright-tests)
+          echo "::set-output name=container_ip::$container_ip"
 
-          allure_report_location=$(echo "$allure_output" | grep -oP "(?<=successfully generated to ).*")
-
-          echo "Allure report location: $all
+      - name: Echo Allure report URL
+        run: |
+          container_ip=${{ steps.container-ip.outputs.container_ip }}
+          echo "Allure report is available at http://$container_ip:36355"
