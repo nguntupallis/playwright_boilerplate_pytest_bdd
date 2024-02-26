@@ -29,6 +29,8 @@ jobs:
 
           sleep 10
 
+          mkdir -p $GITHUB_WORKSPACE/allure-reports
+
           if [ -d "allure-results" ]; then
             cp -r allure-results/* $GITHUB_WORKSPACE/allure-reports/
           else
