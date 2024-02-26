@@ -22,6 +22,11 @@ jobs:
       - name: Build the Docker image
         run: docker build -t playwright-tests -f Docker/tests.dockerfile .
 
+      - name: Authenticate with GCP
+        uses: google-github-actions/auth@v0
+        with:
+          credentials: ${{ secrets.GCP_SA_KEY }}
+
       - name: Limit Docker resources and run container
         run: |
           docker run -d --name playwright-tests \
@@ -46,4 +51,3 @@ jobs:
         run: |
           container_ip=${{ steps.container-ip.outputs.container_ip }}
           echo "Allure report is available at http://$container_ip:36355"
-
