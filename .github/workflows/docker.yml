@@ -17,27 +17,21 @@ jobs:
       - name: Build the Docker image
         run: docker build -t playwright-tests -f Docker/tests.dockerfile .
 
+      - name: Start ngrok
+        run: |
+          ./ngrok authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
+          ./ngrok http 36355 > /dev/null &
+          sleep 10  # Wait for ngrok to establish the tunnel
+
       - name: Run tests
         run: |
+          # Run tests in the Docker container
           docker run -d \
             -e PASSWORD="${{ secrets.PASSWORD }}" \
             -e HEADLESS_MODE="true" \
             -e TEST_ENVIRONMENT="qa" \
             -e BROWSER="chrome" \
-            -p 36355:36355 \
             playwright-tests
-
-          sleep 10
-
-          mkdir -p $GITHUB_WORKSPACE/allure-reports
-
-          docker exec $CONTAINER_ID find /tmp -maxdepth 1 -type d -name "allure-*" | while read REPORTS_DIR; do
-            docker cp $CONTAINER_ID:$REPORTS_DIR $GITHUB_WORKSPACE/allure-reports
-          done
-
-          docker stop $CONTAINER_ID
-          docker rm $CONTAINER_ID
-          shell: bash
 
       - name: Upload Allure reports as artifacts
         uses: actions/upload-artifact@v2
