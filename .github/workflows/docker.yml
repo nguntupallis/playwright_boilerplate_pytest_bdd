@@ -37,6 +37,7 @@ jobs:
 
           docker stop $CONTAINER_ID
           docker rm $CONTAINER_ID
+        shell: bash
 
       - name: Upload Allure reports as artifacts
         uses: actions/upload-artifact@v2
