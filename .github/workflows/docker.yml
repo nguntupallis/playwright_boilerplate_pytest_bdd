@@ -32,7 +32,7 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/allure-reports
 
           docker exec $CONTAINER_ID find /tmp -maxdepth 1 -type d -name "allure-*" | while read REPORTS_DIR; do
-                docker cp $CONTAINER_ID:$REPORTS_DIR $GITHUB_WORKSPACE/allure-reports
+            docker cp $CONTAINER_ID:$REPORTS_DIR $GITHUB_WORKSPACE/allure-reports
           done
 
           docker stop $CONTAINER_ID
