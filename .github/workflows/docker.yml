@@ -11,6 +11,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Download ngrok
+        run: |
+          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+          unzip ngrok-stable-linux-amd64.zip
+          chmod +x ngrok
+          sudo mv ngrok /usr/local/bin/ngrok
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
