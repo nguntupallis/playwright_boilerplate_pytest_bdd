@@ -17,6 +17,9 @@ jobs:
       - name: Build the Docker image
         run: docker build -t playwright-tests -f Docker/tests.dockerfile .
 
+      - name: Remove existing container if exists
+        run: docker rm -f playwright-tests || true
+
       - name: Limit Docker resources and run container
         run: |
           docker run -d --name playwright-tests \
