@@ -30,7 +30,7 @@ jobs:
           sleep 10
 
           if [ -d "allure-results" ]; then
-            cp -r allure-results/* $GITHUB_WORKSPACE/allure-results/
+            cp -r allure-results/* $GITHUB_WORKSPACE/allure-reports/
           else
             echo "Allure reports directory not found."
           fi
@@ -39,4 +39,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: allure-reports
-          path: $GITHUB_WORKSPACE/allure-results
+          path: $GITHUB_WORKSPACE/allure-reports
