@@ -31,12 +31,16 @@ jobs:
 
           mkdir -p $GITHUB_WORKSPACE/allure-reports
 
-          if [ -d "allure-results" ]; then
-            cp -r allure-results/* $GITHUB_WORKSPACE/allure-reports/
+          REPORTS_DIR=$(docker exec $CONTAINER_ID find /tmp -maxdepth 1 -type d -name 'allure-*')
+
+          if [ -n "$REPORTS_DIR" ]; then
+            docker cp $CONTAINER_ID:$REPORTS_DIR $GITHUB_WORKSPACE/allure-reports
           else
             echo "Allure reports directory not found."
           fi
 
+          docker stop $CONTAINER_ID
+          docker rm $CONTAINER_ID
       - name: Upload Allure reports as artifacts
         uses: actions/upload-artifact@v2
         with:
