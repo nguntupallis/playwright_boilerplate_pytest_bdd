@@ -6,6 +6,11 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    container:
+      resources:
+        limits:
+          memory: '2GB'
+          cpu: 2
     
     steps:
       - name: Checkout code
