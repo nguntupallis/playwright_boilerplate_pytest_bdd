@@ -33,9 +33,6 @@ jobs:
             -p 36355:36355 \
             playwright-tests
 
-      - name: Expose Allure report port
-        run: docker run -d --name playwright-tests -p 36355:36355 playwright-tests
-
       - name: Get Docker container IP address
         id: container-ip
         run: |
@@ -49,3 +46,4 @@ jobs:
         run: |
           container_ip=${{ steps.container-ip.outputs.container_ip }}
           echo "Allure report is available at http://$container_ip:36355"
+
