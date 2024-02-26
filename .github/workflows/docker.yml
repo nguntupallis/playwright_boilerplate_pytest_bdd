@@ -50,9 +50,3 @@ jobs:
 
       - name: Echo ngrok URL
         run: echo "Allure reports are available at ${{ steps.ngrok-url.outputs.ngrok-url }}"
-
-      - name: Upload Allure reports as artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: allure-reports
-          path: $GITHUB_WORKSPACE/allure-reports
