@@ -44,7 +44,7 @@ jobs:
 
       - name: Get ngrok URL
         id: ngrok-url
-        run: echo "Ngrok URL: $(curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')"
+        run: echo "Allure reports are available at ${{ steps.ngrok-url.outputs.ngrok-url }}"
 
       - name: Echo ngrok URL
         run: echo "Allure reports are available at ${{ steps.ngrok-url.outputs.ngrok-url }}"
