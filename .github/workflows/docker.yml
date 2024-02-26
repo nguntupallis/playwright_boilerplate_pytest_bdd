@@ -38,7 +38,18 @@ jobs:
             -e HEADLESS_MODE="true" \
             -e TEST_ENVIRONMENT="qa" \
             -e BROWSER="chrome" \
+            -p 36355:36355 \
             playwright-tests
+
+      - name: Wait for ngrok tunnel
+        run: sleep 10
+
+      - name: Get ngrok URL
+        id: ngrok-url
+        run: echo "Ngrok URL: $(curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')"
+
+      - name: Echo ngrok URL
+        run: echo "Allure reports are available at ${{ steps.ngrok-url.outputs.ngrok-url }}"
 
       - name: Upload Allure reports as artifacts
         uses: actions/upload-artifact@v2
