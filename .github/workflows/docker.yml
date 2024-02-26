@@ -26,9 +26,14 @@ jobs:
             -e BROWSER="chrome" \
             -p 36355:36355 \
             playwright-tests
-          # Assuming Allure reports are generated in a directory named 'allure-results'
-          # You need to copy the generated reports to a directory accessible by GitHub Actions
-          cp -r allure-results $GITHUB_WORKSPACE/allure-results
+
+          sleep 10
+
+          if [ -d "allure-results" ]; then
+            cp -r allure-results/* $GITHUB_WORKSPACE/allure-results/
+          else
+            echo "Allure reports directory not found."
+          fi
 
       - name: Upload Allure reports as artifacts
         uses: actions/upload-artifact@v2
