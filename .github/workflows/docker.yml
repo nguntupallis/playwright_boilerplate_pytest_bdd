@@ -11,47 +11,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Download ngrok
-        run: |
-          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-          unzip ngrok-stable-linux-amd64.zip
-          chmod +x ngrok
-          sudo mv ngrok /usr/local/bin/ngrok
-
-      - name: Update ngrok
-        run: ngrok update
-
-      - name: Start ngrok
-        run: |
-          ngrok authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
-          ngrok http 36355 > /dev/null &
-          echo "Waiting for ngrok tunnel to establish..."
-          sleep 10  # Wait for ngrok to establish the tunnel
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
       - name: Build the Docker image
         run: docker build -t playwright-tests -f Docker/tests.dockerfile .
 
-      - name: Run tests
+      - name: Run tests and generate Allure report
         run: |
           # Run tests in the Docker container
-          docker run -d \
+          container_id=$(docker run -d \
             -e PASSWORD="${{ secrets.PASSWORD }}" \
             -e HEADLESS_MODE="true" \
             -e TEST_ENVIRONMENT="qa" \
             -e BROWSER="chrome" \
             -p 36355:36355 \
-            playwright-tests
+            playwright-tests)
 
-      - name: Get ngrok URL
-        id: ngrok-url
-        run: |
-          ngrok http 80 &
-          sleep 10
-          ngrok_url=$(curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
-          echo "Ngrok URL: $ngrok_url"
+          # Execute Allure command inside the container and capture the output
+          allure_output=$(docker exec $container_id allure serve --port 36355 ./allure-results)
 
-      - name: Echo ngrok URL
-        run: echo "Allure reports are available at ${{ steps.ngrok-url.outputs.ngrok-url }}"
+          # Extract Allure report location from the output
+          allure_report_location=$(echo "$allure_output" | grep -oP "(?<=successfully generated to ).*")
+
+          # Print the Allure report location
+          echo "Allure report location: $allure_report_location"
+
+      - name: Copy Allure report from Docker container
+        run: docker cp $container_id:$allure_report_location /github/workspace/allure-report
+
+      - name: Upload Allure report as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: allure-report
+          path: allure-report
