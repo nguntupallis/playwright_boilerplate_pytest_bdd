@@ -18,17 +18,18 @@ jobs:
           chmod +x ngrok
           sudo mv ngrok /usr/local/bin/ngrok
 
+      - name: Start ngrok
+        run: |
+          ngrok authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
+          ngrok http 36355 > /dev/null &
+          echo "Waiting for ngrok tunnel to establish..."
+          sleep 10  # Wait for ngrok to establish the tunnel
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
       - name: Build the Docker image
         run: docker build -t playwright-tests -f Docker/tests.dockerfile .
-
-      - name: Start ngrok
-        run: |
-          ngrok authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
-          ngrok http 36355 > /dev/null &
-          sleep 10  # Wait for ngrok to establish the tunnel
 
       - name: Run tests
         run: |
@@ -40,9 +41,6 @@ jobs:
             -e BROWSER="chrome" \
             -p 36355:36355 \
             playwright-tests
-
-      - name: Wait for ngrok tunnel
-        run: sleep 10
 
       - name: Get ngrok URL
         id: ngrok-url
