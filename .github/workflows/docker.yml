@@ -20,7 +20,7 @@ jobs:
       - name: Limit Docker resources and run container
         run: |
           docker run -d --name playwright-tests \
-            --memory 2g --cpus 2 \
+            --memory 4g --cpus 4 \
             -e PASSWORD="${{ secrets.PASSWORD }}" \
             -e HEADLESS_MODE="true" \
             -e TEST_ENVIRONMENT="qa" \
