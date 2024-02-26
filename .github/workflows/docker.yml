@@ -25,21 +25,21 @@ jobs:
       - name: Run tests and generate Allure report
         run: |
           # Run tests in the Docker container
-          container_id=$(docker run -d \
+          container_id=$(docker run \
             -e PASSWORD="${{ secrets.PASSWORD }}" \
             -e HEADLESS_MODE="true" \
             -e TEST_ENVIRONMENT="qa" \
             -e BROWSER="chrome" \
             -p 36355:36355 \
+            -d \
             playwright-tests)
 
-          # Execute Allure command inside the container and capture the output
+          docker wait $container_id
+
           allure_output=$(docker exec $container_id allure serve --port 36355 ./allure-results)
 
-          # Extract Allure report location from the output
           allure_report_location=$(echo "$allure_output" | grep -oP "(?<=successfully generated to ).*")
 
-          # Print the Allure report location
           echo "Allure report location: $allure_report_location"
 
       - name: Copy Allure report from Docker container
