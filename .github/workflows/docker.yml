@@ -30,7 +30,7 @@ jobs:
             -e HEADLESS_MODE="true" \
             -e TEST_ENVIRONMENT="qa" \
             -e BROWSER="chrome" \
-            -p 36355:36355 \
+            -p 5050:5050 \
             playwright-tests
 
       - name: Get Docker container IP address
@@ -42,34 +42,21 @@ jobs:
       - name: Debug Docker container logs
         run: docker logs playwright-tests
 
+      - name: Setup Allure Server
+        run: |
+          wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.17.3/allure-commandline-2.17.3.tgz
+          tar -zxvf allure-commandline-2.17.3.tgz
+
+      - name: Start Allure Server
+        run: |
+          cd allure-2.17.3
+          ./bin/allure serve --port 5050 &
+
+      - name: Wait for Allure Server to start
+        run: sleep 10
+
       - name: Echo Allure report URL
         run: |
           container_ip=${{ steps.container-ip.outputs.container_ip }}
-          allure_report_url="http://$container_ip:36355"
+          allure_report_url="http://localhost:5050"
           echo "Allure report is available at $allure_report_url"
-
-      # - name: Wait for Allure report to be available
-      #   run: |
-      #     container_ip=${{ steps.container-ip.outputs.container_ip }}
-      #     allure_report_url="http://$container_ip:36355"
-      #     until curl -sSf "$allure_report_url" >/dev/null; do
-      #       echo "Waiting for Allure report to be available..."
-      #       sleep 10
-      #     done
-
-      # - name: Fetch Allure report from Docker container
-      #   run: |
-      #     container_ip=${{ steps.container-ip.outputs.container_ip }}
-      #     allure_report=$(curl -sS "http://${container_ip}:36355")
-      #     echo "$allure_report"
-
-      # - name: Deploy Allure report to Netlify
-      #   run: |
-      #     netlify deploy --prod --dir=allure-report.html
-      #   env:
-      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-
-      # - name: Display Netlify URL
-      #   run: |
-      #     netlify_url=$(netlify status | grep "Website URL" | awk '{print $3}')
-      #     echo "Netlify deployment is available at $netlify_url"          
