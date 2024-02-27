@@ -50,8 +50,9 @@ jobs:
 
       - name: Fetch Allure report from Docker container
         run: |
-          allure_report=$(curl -sS http://$container_ip:36355)
-          echo "$allure_report" > allure-report.html
+          container_ip=${{ steps.container-ip.outputs.container_ip }}
+          allure_report=$(curl -sS "http://${container_ip}:36355")
+          echo "$allure_report"
 
       - name: Deploy Allure report to Netlify
         run: |
