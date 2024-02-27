@@ -33,6 +33,10 @@ jobs:
             -p 36355:36355 \
             playwright-tests
 
+      - name: Check Port Connectivity
+        run: |
+          telnet localhost 36355
+
       - name: Get Docker container IP address
         id: container-ip
         run: |
