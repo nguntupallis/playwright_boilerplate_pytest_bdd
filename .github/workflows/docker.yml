@@ -33,30 +33,43 @@ jobs:
             -p 5050:5050 \
             playwright-tests
 
-      - name: Get Docker container IP address
-        id: container-ip
+      - name: Copy Allure report out of Docker container
         run: |
-          container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' playwright-tests)
-          echo "::set-output name=container_ip::$container_ip"
+          container_id=$(docker ps -qf "name=playwright-tests")
+          docker cp $container_id:/tmp/allure-results ./allure-results
 
-      - name: Debug Docker container logs
-        run: docker logs playwright-tests
+      - name: Deploy to Netlify
+        uses: netlify/actions/cli@main
+        with:
+          command: deploy
+          args: --dir=allure-results --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}            
 
-      - name: Setup Allure Server
-        run: |
-          wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.17.3/allure-commandline-2.17.3.tgz
-          tar -zxvf allure-commandline-2.17.3.tgz
+      # - name: Get Docker container IP address
+      #   id: container-ip
+      #   run: |
+      #     container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' playwright-tests)
+      #     echo "::set-output name=container_ip::$container_ip"
 
-      - name: Start Allure Server
-        run: |
-          cd allure-2.17.3
-          ./bin/allure serve --port 5051 &
+      # - name: Debug Docker container logs
+      #   run: docker logs playwright-tests
 
-      - name: Wait for Allure Server to start
-        run: sleep 10
+      # - name: Setup Allure Server
+      #   run: |
+      #     wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.17.3/allure-commandline-2.17.3.tgz
+      #     tar -zxvf allure-commandline-2.17.3.tgz
 
-      - name: Echo Allure report URL
-        run: |
-          container_ip=${{ steps.container-ip.outputs.container_ip }}
-          allure_report_url="http://localhost:5051"
-          echo "Allure report is available at $allure_report_url"
+      # - name: Start Allure Server
+      #   run: |
+      #     cd allure-2.17.3
+      #     ./bin/allure serve --port 5051 &
+
+      # - name: Wait for Allure Server to start
+      #   run: sleep 10
+
+      # - name: Echo Allure report URL
+      #   run: |
+      #     container_ip=${{ steps.container-ip.outputs.container_ip }}
+      #     allure_report_url="http://localhost:5051"
+      #     echo "Allure report is available at $allure_report_url"
