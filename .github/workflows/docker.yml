@@ -60,6 +60,12 @@ jobs:
             echo "Allure directory not found."
           fi
 
+      - name: Start Python HTTP server
+        run: |
+          cd allure-results
+          python3 -m http.server 8000 >/dev/null 2>&1 &
+          echo "Python HTTP server started."
+
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0
         with:
