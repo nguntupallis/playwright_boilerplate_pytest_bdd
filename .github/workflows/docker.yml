@@ -40,12 +40,15 @@ jobs:
       - name: Find Allure report directory
         run: |
           container_id=$(docker ps -qf "name=playwright-tests")
+          echo "Container ID: $container_id"  # Debugging
           if [[ -n "$container_id" ]]; then
             allure_directory=$(docker exec $container_id find /tmp -type d -name "allure-report" -print -quit)
+            echo "Allure Directory: $allure_directory"  # Debugging
             echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
           else
             echo "Container not found or not running."
           fi
+
 
       - name: Copy Allure report out of Docker container
         run: |
