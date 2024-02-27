@@ -50,7 +50,7 @@ jobs:
       - name: Start Allure Server
         run: |
           cd allure-2.17.3
-          ./bin/allure serve --port 5050 &
+          ./bin/allure serve --port 5051 &
 
       - name: Wait for Allure Server to start
         run: sleep 10
@@ -58,5 +58,5 @@ jobs:
       - name: Echo Allure report URL
         run: |
           container_ip=${{ steps.container-ip.outputs.container_ip }}
-          allure_report_url="http://localhost:5050"
+          allure_report_url="http://localhost:5051"
           echo "Allure report is available at $allure_report_url"
