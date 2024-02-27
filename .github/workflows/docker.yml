@@ -43,15 +43,15 @@ jobs:
           allure_directory=$(docker exec $container_id find /tmp -type d -name "allure-report" -print -quit)
           echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
 
-        - name: Copy Allure report out of Docker container
-          run: |
-            container_id=$(docker ps -qf "name=playwright-tests")
-            allure_directory="${{ env.ALLURE_DIRECTORY }}"
-            if [[ -n "$allure_directory" ]]; then
-              docker cp $container_id:$allure_directory ./allure-results
-            else
-              echo "Allure directory not found."
-            fi
+      - name: Copy Allure report out of Docker container
+        run: |
+          container_id=$(docker ps -qf "name=playwright-tests")
+          allure_directory="${{ env.ALLURE_DIRECTORY }}"
+          if [[ -n "$allure_directory" ]]; then
+            docker cp $container_id:$allure_directory ./allure-results
+          else
+            echo "Allure directory not found."
+          fi
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0
