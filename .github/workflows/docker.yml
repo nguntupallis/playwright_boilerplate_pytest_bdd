@@ -35,7 +35,7 @@ jobs:
             playwright-tests
 
       - name: Wait for Docker container to start
-        run: sleep 10
+        run: sleep 30
 
       - name: Find Allure report directory
         run: |
