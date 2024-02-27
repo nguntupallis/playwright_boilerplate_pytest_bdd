@@ -7,14 +7,21 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     
+    services:
+      playwright-tests:
+        image: playwright-tests:latest
+        ports:
+          - 36355:36355
+        options: --name playwright-tests
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Stop and remove all containers
         run: |
-          docker stop $(docker ps -q) || true
-          docker rm $(docker ps -aq) || true
+          docker stop playwright-tests || true
+          docker rm playwright-tests || true
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -22,24 +29,8 @@ jobs:
       - name: Build the Docker image
         run: docker build -t playwright-tests -f Docker/tests.dockerfile .
 
-      - name: Authenticate with GCP
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-          export_environment_variables: true
-          access_token_lifetime: 3600s
-          access_token_scopes: https://www.googleapis.com/auth/cloud-platform
-
       - name: Limit Docker resources and run container
-        run: |
-          docker run -d --name playwright-tests \
-            --memory 8g \
-            -e PASSWORD="${{ secrets.PASSWORD }}" \
-            -e HEADLESS_MODE="true" \
-            -e TEST_ENVIRONMENT="qa" \
-            -e BROWSER="chrome" \
-            -p 36355:36355 \
-            playwright-tests
+        run: docker run -d --name playwright-tests --memory 8g -e PASSWORD="${{ secrets.PASSWORD }}" -e HEADLESS_MODE="true" -e TEST_ENVIRONMENT="qa" -e BROWSER="chrome" playwright-tests
 
       - name: Get Docker container IP address
         id: container-ip
