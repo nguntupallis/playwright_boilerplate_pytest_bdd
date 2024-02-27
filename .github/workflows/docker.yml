@@ -33,10 +33,6 @@ jobs:
             -p 36355:36355 \
             playwright-tests
 
-      - name: Check Port Connectivity
-        run: |
-          telnet localhost 36355
-
       - name: Get Docker container IP address
         id: container-ip
         run: |
@@ -52,28 +48,28 @@ jobs:
           allure_report_url="http://$container_ip:36355"
           echo "Allure report is available at $allure_report_url"
 
-      - name: Wait for Allure report to be available
-        run: |
-          container_ip=${{ steps.container-ip.outputs.container_ip }}
-          allure_report_url="http://$container_ip:36355"
-          until curl -sSf "$allure_report_url" >/dev/null; do
-            echo "Waiting for Allure report to be available..."
-            sleep 10
-          done
+      # - name: Wait for Allure report to be available
+      #   run: |
+      #     container_ip=${{ steps.container-ip.outputs.container_ip }}
+      #     allure_report_url="http://$container_ip:36355"
+      #     until curl -sSf "$allure_report_url" >/dev/null; do
+      #       echo "Waiting for Allure report to be available..."
+      #       sleep 10
+      #     done
 
-      - name: Fetch Allure report from Docker container
-        run: |
-          container_ip=${{ steps.container-ip.outputs.container_ip }}
-          allure_report=$(curl -sS "http://${container_ip}:36355")
-          echo "$allure_report"
+      # - name: Fetch Allure report from Docker container
+      #   run: |
+      #     container_ip=${{ steps.container-ip.outputs.container_ip }}
+      #     allure_report=$(curl -sS "http://${container_ip}:36355")
+      #     echo "$allure_report"
 
-      - name: Deploy Allure report to Netlify
-        run: |
-          netlify deploy --prod --dir=allure-report.html
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      # - name: Deploy Allure report to Netlify
+      #   run: |
+      #     netlify deploy --prod --dir=allure-report.html
+      #   env:
+      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
-      - name: Display Netlify URL
-        run: |
-          netlify_url=$(netlify status | grep "Website URL" | awk '{print $3}')
-          echo "Netlify deployment is available at $netlify_url"          
+      # - name: Display Netlify URL
+      #   run: |
+      #     netlify_url=$(netlify status | grep "Website URL" | awk '{print $3}')
+      #     echo "Netlify deployment is available at $netlify_url"          
