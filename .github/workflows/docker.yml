@@ -48,6 +48,15 @@ jobs:
           allure_report_url="http://$container_ip:36355"
           echo "Allure report is available at $allure_report_url"
 
+      - name: Wait for Allure report to be available
+        run: |
+          container_ip=${{ steps.container-ip.outputs.container_ip }}
+          allure_report_url="http://$container_ip:36355"
+          until curl -sSf "$allure_report_url" >/dev/null; do
+            echo "Waiting for Allure report to be available..."
+            sleep 10
+          done
+
       - name: Fetch Allure report from Docker container
         run: |
           container_ip=${{ steps.container-ip.outputs.container_ip }}
