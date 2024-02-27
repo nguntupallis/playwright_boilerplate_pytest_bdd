@@ -22,7 +22,8 @@ jobs:
       - name: Build the Docker image
         run: docker build -t playwright-tests -f Docker/tests.dockerfile .
 
-      - name: Limit Docker resources and run container
+      - name: Run Docker container
+        id: run-container
         run: |
           docker run -d --name playwright-tests \
             --memory 8g \
@@ -33,16 +34,27 @@ jobs:
             -p 5050:5050 \
             playwright-tests
 
+      - name: Wait for Docker container to start
+        run: sleep 10
+
+      - name: Find Allure report directory
+        id: find-allure-directory
+        run: |
+          container_id=$(docker ps -qf "name=playwright-tests")
+          allure_directory=$(docker exec $container_id find /tmp -type d -name "allure-report" -print -quit)
+          echo "::set-output name=allure_directory::$allure_directory"
+
       - name: Copy Allure report out of Docker container
         run: |
           container_id=$(docker ps -qf "name=playwright-tests")
-          docker cp $container_id:/tmp/allure-results ./allure-results
+          allure_directory=$(echo "${{ steps.find-allure-directory.outputs.allure_directory }}")
+          docker cp $container_id:$allure_directory ./allure-results
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0
         with:
-          publish-dir: './allure-results'   # Change the directory to where your Allure report is generated
-          production-branch: main          # Change to your main branch name
+          publish-dir: './allure-results'
+          production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"
           enable-pull-request-comment: false
@@ -51,32 +63,4 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 1        
-
-      # - name: Get Docker container IP address
-      #   id: container-ip
-      #   run: |
-      #     container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' playwright-tests)
-      #     echo "::set-output name=container_ip::$container_ip"
-
-      # - name: Debug Docker container logs
-      #   run: docker logs playwright-tests
-
-      # - name: Setup Allure Server
-      #   run: |
-      #     wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.17.3/allure-commandline-2.17.3.tgz
-      #     tar -zxvf allure-commandline-2.17.3.tgz
-
-      # - name: Start Allure Server
-      #   run: |
-      #     cd allure-2.17.3
-      #     ./bin/allure serve --port 5051 &
-
-      # - name: Wait for Allure Server to start
-      #   run: sleep 10
-
-      # - name: Echo Allure report URL
-      #   run: |
-      #     container_ip=${{ steps.container-ip.outputs.container_ip }}
-      #     allure_report_url="http://localhost:5051"
-      #     echo "Allure report is available at $allure_report_url"
+        timeout-minutes: 1
