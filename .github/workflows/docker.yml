@@ -33,50 +33,34 @@ jobs:
             -e BROWSER="chrome" \
             -p 5050:5050 \
             playwright-tests
-          sleep 120
+          sleep 30
 
       - name: Find Allure report directory
         run: |
           container_id=$(docker ps -qf "name=playwright-tests")
           echo "Container ID: $container_id"  # Debugging
-          if [[ -n "$container_id" ]]; then
-            allure_directory=$(docker exec $container_id find /tmp -type d -name "allure-report" -print -quit)
-            echo "Allure Directory: $allure_directory"  # Debugging
-            echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
-          else
-            echo "Container not found or not running."
-          fi
-
-      # - name: Check and adjust permissions for allure-results directory
-      #   run: |
-      #     # Check current permissions of allure-results directory
-      #     ls -ld allure-results
-
-      #     # Adjust permissions if necessary (for example, give write permission to everyone)
-      #     chmod 777 allure-results
-
-      # - name: Copy Allure report out of Docker container
-      #   run: |
-      #     container_id=$(docker ps -qf "name=playwright-tests")
-      #     allure_directory="${{ env.ALLURE_DIRECTORY }}"
-      #     if [[ -n "$allure_directory" ]]; then
-      #       docker cp $container_id:$allure_directory allure-results
-      #     else
-      #       echo "Allure directory not found."
-      #     fi
-
-      - name: Check Allure report directory contents
-        run: |
-          allure_directory="${{ env.ALLURE_DIRECTORY }}"
+          allure_directory=$(docker exec $container_id find /tmp -type d -name "allure-report" -print -quit)
           echo "Allure Directory: $allure_directory"  # Debugging
-          ls -la $allure_directory  # List contents of the directory
-          ls -la $allure_directory/*  # List contents of subdirectories if any          
-
-      - name: Archive Allure report directory
-        uses: actions/upload-artifact@v2
-        with:
-          name: allure-report
-          path: ${{ env.ALLURE_DIRECTORY }}
+          if [[ -n "$allure_directory" ]]; then
+            echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
+            echo "Contents of Allure Directory:"
+            docker exec $container_id ls -la "$allure_directory"
+            
+            # Create a temporary directory to store the contents
+            temp_dir="$(mktemp -d)"
+            
+            # Copy the contents of allure_directory to the temporary directory
+            docker cp "$container_id":"$allure_directory"/. "$temp_dir"
+            
+            # Archive the contents of the temporary directory
+            tar -czf allure-report.tar.gz -C "$temp_dir" .
+            
+            # Move the archive to the workspace root directory and rename it to allure-report
+            mv allure-report.tar.gz allure-report
+            echo "ALLURE_REPORT_ARCHIVE=$(pwd)/allure-report" >> $GITHUB_ENV
+          else
+            echo "Allure directory not found or is empty."
+          fi
 
       - name: Retrieve and extract Allure report artifact
         uses: actions/download-artifact@v2
