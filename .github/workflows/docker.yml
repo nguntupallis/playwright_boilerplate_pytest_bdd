@@ -49,6 +49,13 @@ jobs:
             echo "Container not found or not running."
           fi
 
+      - name: Check and adjust permissions for allure-results directory
+        run: |
+          # Check current permissions of allure-results directory
+          ls -ld allure-results
+
+          # Adjust permissions if necessary (for example, give write permission to everyone)
+          chmod 777 allure-results
 
       - name: Copy Allure report out of Docker container
         run: |
