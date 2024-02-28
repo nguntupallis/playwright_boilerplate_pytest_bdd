@@ -33,25 +33,19 @@ jobs:
             -e BROWSER="chrome" \
             -p 5050:5050 \
             playwright-tests
-
-      - name: Wait for Docker container to start
-        run: sleep 30
+          sleep 50
 
       - name: Find Allure report directory
         run: |
           container_id=$(docker ps -qf "name=playwright-tests")
           echo "Container ID: $container_id"  # Debugging
-          while true; do
+          if [[ -n "$container_id" ]]; then
             allure_directory=$(docker exec $container_id find /tmp -type d -name "allure-report" -print -quit)
-            if [[ -n "$allure_directory" ]]; then
-              echo "Allure Directory: $allure_directory"  # Debugging
-              echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
-              break
-            else
-              echo "Allure directory not found. Waiting..."
-              sleep 10
-            fi
-          done
+            echo "Allure Directory: $allure_directory"  # Debugging
+            echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
+          else
+            echo "Container not found or not running."
+          fi
 
       - name: Check and adjust permissions for allure-results directory
         run: |
@@ -103,6 +97,7 @@ jobs:
           netlify deploy --prod --dir . --message "Deploy from GitHub Actions"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}          
+       
 
       # - name: Start Python HTTP server
       #   run: |
