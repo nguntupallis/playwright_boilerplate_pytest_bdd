@@ -70,14 +70,14 @@ jobs:
 
       - name: Generate Allure report
         run: |
-          cd allure-report
+          cd $(pwd)/allure-report
           # Replace this command with the actual command to generate the Allure report
           allure generate --clean
           
       - name: Deploy to Netlify
         run: |
           npm install -g netlify-cli  # Install Netlify CLI
-          cd allure-report
+          cd $(pwd)/allure-report
           netlify deploy --prod --dir . --message "Deploy from GitHub Actions"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}          
