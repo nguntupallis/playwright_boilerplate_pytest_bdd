@@ -33,7 +33,7 @@ jobs:
             -e BROWSER="chrome" \
             -p 5050:5050 \
             playwright-tests
-          sleep 50
+          sleep 120
 
       - name: Find Allure report directory
         run: |
