@@ -62,7 +62,7 @@ jobs:
           container_id=$(docker ps -qf "name=playwright-tests")
           allure_directory="${{ env.ALLURE_DIRECTORY }}"
           if [[ -n "$allure_directory" ]]; then
-            docker cp $container_id:$allure_directory ./allure-results
+            docker cp $container_id:$allure_directory allure-results
           else
             echo "Allure directory not found."
           fi
