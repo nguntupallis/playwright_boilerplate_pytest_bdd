@@ -67,6 +67,13 @@ jobs:
             echo "Allure directory not found."
           fi
 
+      - name: Check Allure report directory contents
+        run: |
+          allure_directory="${{ env.ALLURE_DIRECTORY }}"
+          echo "Allure Directory: $allure_directory"  # Debugging
+          ls -la $allure_directory  # List contents of the directory
+          ls -la $allure_directory/*  # List contents of subdirectories if any          
+
       - name: Archive Allure report directory
         uses: actions/upload-artifact@v2
         with:
