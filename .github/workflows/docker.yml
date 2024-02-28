@@ -67,23 +67,49 @@ jobs:
             echo "Allure directory not found."
           fi
 
-      - name: Start Python HTTP server
-        run: |
-          cd allure-results
-          python3 -m http.server 8000 >/dev/null 2>&1 &
-          echo "Python HTTP server started."
-
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v2.0
+      - name: Archive Allure report directory
+        uses: actions/upload-artifact@v2
         with:
-          publish-dir: './allure-results'
-          production-branch: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: "Deploy from GitHub Actions"
-          enable-pull-request-comment: false
-          enable-commit-comment: true
-          overwrites-pull-request-comment: true
+          name: allure-report
+          path: ${{ env.ALLURE_DIRECTORY }}
+
+      - name: Retrieve and extract Allure report artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: allure-report
+          path: allure-report
+
+      - name: Generate Allure report
+        run: |
+          cd allure-report
+          # Replace this command with the actual command to generate the Allure report
+          allure generate --clean
+          
+      - name: Deploy to Netlify
+        run: |
+          npm install -g netlify-cli  # Install Netlify CLI
+          cd allure-report
+          netlify deploy --prod --dir . --message "Deploy from GitHub Actions"
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 1
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}          
+
+      # - name: Start Python HTTP server
+      #   run: |
+      #     cd allure-results
+      #     python3 -m http.server 8000 >/dev/null 2>&1 &
+      #     echo "Python HTTP server started."
+
+      # - name: Deploy to Netlify
+      #   uses: nwtgck/actions-netlify@v2.0
+      #   with:
+      #     publish-dir: './allure-results'
+      #     production-branch: main
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     deploy-message: "Deploy from GitHub Actions"
+      #     enable-pull-request-comment: false
+      #     enable-commit-comment: true
+      #     overwrites-pull-request-comment: true
+      #   env:
+      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      #   timeout-minutes: 1
