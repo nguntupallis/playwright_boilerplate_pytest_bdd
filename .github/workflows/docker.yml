@@ -41,13 +41,17 @@ jobs:
         run: |
           container_id=$(docker ps -qf "name=playwright-tests")
           echo "Container ID: $container_id"  # Debugging
-          if [[ -n "$container_id" ]]; then
+          while true; do
             allure_directory=$(docker exec $container_id find /tmp -type d -name "allure-report" -print -quit)
-            echo "Allure Directory: $allure_directory"  # Debugging
-            echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
-          else
-            echo "Container not found or not running."
-          fi
+            if [[ -n "$allure_directory" ]]; then
+              echo "Allure Directory: $allure_directory"  # Debugging
+              echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
+              break
+            else
+              echo "Allure directory not found. Waiting..."
+              sleep 10
+            fi
+          done
 
       - name: Check and adjust permissions for allure-results directory
         run: |
