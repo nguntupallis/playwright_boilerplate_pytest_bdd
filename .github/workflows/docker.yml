@@ -77,11 +77,18 @@ jobs:
             echo "Allure directory not found or is empty."
           fi
 
+      - name: Upload Allure report archive
+        uses: actions/upload-artifact@v2
+        with:
+          name: allure-report
+          path: /tmp/allure-report.tar.gz
+
+
       - name: Retrieve and extract Allure report artifact
         uses: actions/download-artifact@v2
         with:
           name: allure-report
-          path: ${{ steps.set-allure-archive-path.outputs.allure_report_archive }}
+          path: allure-report
 
       - name: Generate Allure report
         run: |
