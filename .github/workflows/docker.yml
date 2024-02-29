@@ -81,6 +81,11 @@ jobs:
         with:
           name: allure-report-env
 
+      - name: List contents of the downloaded artifact
+        run: |
+          cd ${{ github.workspace }}
+          ls -la allure-report-env          
+
       - name: Source environment file
         run: source allure-report-env          
 
