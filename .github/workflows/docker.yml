@@ -38,15 +38,15 @@ jobs:
       - name: Find Allure report directory
         run: |
           container_id=$(docker ps -qf "name=playwright-tests")
-          echo "Container ID: $container_id"  # Debugging
+          echo "Container ID: $container_id"  
           allure_directory=$(docker exec $container_id find /tmp -type d -name "allure-report" -print -quit)
-          echo "Allure Directory: $allure_directory"  # Debugging
+          echo "Allure Directory: $allure_directory"  
           if [[ -n "$allure_directory" ]]; then
             echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
             
             # Create a temporary directory to store the contents
             temp_dir="$(mktemp -d)"
-            echo "Temporary Directory: $temp_dir"  # Debugging
+            echo "Temporary Directory: $temp_dir"  
             
             # Copy the contents of allure_directory to the temporary directory
             docker cp "$container_id":"$allure_directory"/. "$temp_dir"
