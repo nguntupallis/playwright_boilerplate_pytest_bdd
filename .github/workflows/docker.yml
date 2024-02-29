@@ -56,7 +56,7 @@ jobs:
             tar -czf allure-report.tar.gz -C "$temp_dir" .
             
             # Move the archive to the parent directory of the GitHub workspace
-            mv allure-report.tar.gz ../allure-report.tar.gz
+            mv allure-report.tar.gz ../allure-report.tar.gz 2>&1
             
             # Set the environment variable for the archive path
             echo "ALLURE_REPORT_ARCHIVE=$(realpath ../allure-report.tar.gz)" >> $GITHUB_ENV
