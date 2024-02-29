@@ -53,23 +53,20 @@ jobs:
             # Copy the contents of allure_directory to the temporary directory
             docker cp "$container_id":"$allure_directory"/. "$temp_dir"
             
-            # Check the contents of the temporary directory
-            echo "Contents of Temporary Directory:"
-            ls -la "$temp_dir"
-            
             # Archive the contents of the temporary directory
-            tar -czf allure-report.tar.gz -C "$temp_dir" .
+            (cd "$(dirname "$temp_dir")" && tar -czf allure-report.tar.gz -C "$(basename "$temp_dir")" .)
             
-            # Move the archive to the parent directory of the GitHub workspace
-            mv allure-report.tar.gz ../allure-report.tar.gz 2>&1
-            
-            # Set the environment variable for the archive path
-            echo "ALLURE_REPORT_ARCHIVE=$(realpath ../allure-report.tar.gz)" >> $GITHUB_ENV
+            # Check if tar was generated successfully
+            if [ $? -eq 0 ]; then
+              echo "Tar archive generated successfully."
+              # Set the environment variable for the archive path
+              echo "ALLURE_REPORT_ARCHIVE=$(realpath "$(dirname "$temp_dir")/allure-report.tar.gz")" >> $GITHUB_ENV
+            else
+              echo "Failed to generate tar archive."
+            fi
           else
             echo "Allure directory not found or is empty."
           fi
-
-
 
 
       - name: Retrieve and extract Allure report artifact
