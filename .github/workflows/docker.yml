@@ -35,34 +35,34 @@ jobs:
             playwright-tests
           sleep 30
 
-        - name: Find Allure report directory
-          run: |
-            container_id=$(docker ps -qf "name=playwright-tests")
-            echo "Container ID: $container_id"  # Debugging
-            allure_directory=$(docker exec $container_id find /tmp -type d -name "allure-report" -print -quit)
-            echo "Allure Directory: $allure_directory"  # Debugging
-            if [[ -n "$allure_directory" ]]; then
-              echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
-              echo "Contents of Allure Directory:"
-              docker exec $container_id ls -la "$allure_directory"
-              
-              # Create a temporary directory to store the contents
-              temp_dir="$(mktemp -d)"
-              
-              # Copy the contents of allure_directory to the temporary directory
-              docker cp "$container_id":"$allure_directory"/. "$temp_dir"
-              
-              # Archive the contents of the temporary directory
-              tar -czf allure-report.tar.gz -C "$temp_dir" .
-              
-              # Move the archive to the parent directory of the GitHub workspace
-              mv allure-report.tar.gz ../allure-report.tar.gz
-              
-              # Set the environment variable for the archive path
-              echo "ALLURE_REPORT_ARCHIVE=$(realpath ../allure-report.tar.gz)" >> $GITHUB_ENV
-            else
-              echo "Allure directory not found or is empty."
-            fi
+      - name: Find Allure report directory
+        run: |
+          container_id=$(docker ps -qf "name=playwright-tests")
+          echo "Container ID: $container_id"  # Debugging
+          allure_directory=$(docker exec $container_id find /tmp -type d -name "allure-report" -print -quit)
+          echo "Allure Directory: $allure_directory"  # Debugging
+          if [[ -n "$allure_directory" ]]; then
+            echo "ALLURE_DIRECTORY=$allure_directory" >> $GITHUB_ENV
+            echo "Contents of Allure Directory:"
+            docker exec $container_id ls -la "$allure_directory"
+            
+            # Create a temporary directory to store the contents
+            temp_dir="$(mktemp -d)"
+            
+            # Copy the contents of allure_directory to the temporary directory
+            docker cp "$container_id":"$allure_directory"/. "$temp_dir"
+            
+            # Archive the contents of the temporary directory
+            tar -czf allure-report.tar.gz -C "$temp_dir" .
+            
+            # Move the archive to the parent directory of the GitHub workspace
+            mv allure-report.tar.gz ../allure-report.tar.gz
+            
+            # Set the environment variable for the archive path
+            echo "ALLURE_REPORT_ARCHIVE=$(realpath ../allure-report.tar.gz)" >> $GITHUB_ENV
+          else
+            echo "Allure directory not found or is empty."
+          fi
 
 
 
