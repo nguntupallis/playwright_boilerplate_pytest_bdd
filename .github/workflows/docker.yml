@@ -55,12 +55,15 @@ jobs:
             # Archive the contents of the temporary directory
             tar -czf allure-report.tar.gz -C "$temp_dir" .
             
-            # Move the archive to the workspace root directory and rename it to allure-report
-            mv allure-report.tar.gz allure-report
-            echo "ALLURE_REPORT_ARCHIVE=$(pwd)/allure-report" >> $GITHUB_ENV
+            # Move the archive to a specific directory within the GitHub workspace
+            mv allure-report.tar.gz $GITHUB_WORKSPACE/allure-report.tar.gz
+            
+            # Set the environment variable for the archive path
+            echo "ALLURE_REPORT_ARCHIVE=$GITHUB_WORKSPACE/allure-report.tar.gz" >> $GITHUB_ENV
           else
             echo "Allure directory not found or is empty."
           fi
+
 
       - name: Retrieve and extract Allure report artifact
         uses: actions/download-artifact@v2
