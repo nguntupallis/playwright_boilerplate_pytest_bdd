@@ -59,7 +59,6 @@ jobs:
             # Check if tar was generated successfully
             if [ $? -eq 0 ]; then
               echo "Tar archive generated successfully."
-              # Set the environment variable for the archive path
               echo "ALLURE_REPORT_ARCHIVE=$(realpath "$(dirname "$temp_dir")/allure-report.tar.gz")" >> $GITHUB_ENV
             else
               echo "Failed to generate tar archive."
