@@ -67,6 +67,7 @@ jobs:
             echo "Archive path: $(realpath "$(dirname "$temp_dir")/allure-report.tar.gz")"
             # Set the environment variable for the archive path
             echo "ALLURE_REPORT_ARCHIVE=$(realpath "$(dirname "$temp_dir")/allure-report.tar.gz")" >> $GITHUB_ENV
+            export ALLURE_REPORT_ARCHIVE=$(realpath "$(dirname "$temp_dir")/allure-report.tar.gz")
             
             # Check if tar was generated successfully
             if [ $? -eq 0 ]; then
