@@ -63,6 +63,10 @@ jobs:
             # Echo contents of the tar archive
             echo "Contents of Allure Report Tar Archive:"
             tar -tf "$(dirname "$temp_dir")/allure-report.tar.gz"
+
+            echo "Archive path: $(realpath "$(dirname "$temp_dir")/allure-report.tar.gz")"
+            # Set the environment variable for the archive path
+            echo "ALLURE_REPORT_ARCHIVE=$(realpath "$(dirname "$temp_dir")/allure-report.tar.gz")" >> $GITHUB_ENV
             
             # Check if tar was generated successfully
             if [ $? -eq 0 ]; then
