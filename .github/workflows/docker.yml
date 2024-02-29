@@ -113,10 +113,10 @@ jobs:
         run: |
           npm install -g netlify-cli  # Install Netlify CLI
           cd allure-report
-          netlify deploy --prod --dir . --message "Deploy from GitHub Actions"
+          netlify deploy --prod --dir . --message "Deploy from GitHub Actions" --site ${{ secrets.NETLIFY_SITE_ID }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-    
+          
        
 
       # - name: Start Python HTTP server
