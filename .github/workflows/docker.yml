@@ -100,14 +100,14 @@ jobs:
 
       - name: List contents after unzipping
         run: |
-          ls -l allure-report          
+          ls -l allure-report/allure-report         
 
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
         with:
           gh_pages: gh-pages
-          allure_history: allure-history
-          allure_results: allure-report 
+          allure_history: allure-report/allure-report/allure-history
+          allure_results: allure-report/allure-report/allure-report 
 
       - name: Deploy to Netlify
         run: |
