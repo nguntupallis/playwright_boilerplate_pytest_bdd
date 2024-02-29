@@ -54,11 +54,12 @@ jobs:
             # Archive the contents of the temporary directory
             (cd "$(dirname "$temp_dir")" && tar -czf allure-report.tar.gz -C "$(basename "$temp_dir")" .)
             
-            # Set the path of Allure report archive in an environment file
-            echo "ALLURE_REPORT_ARCHIVE_PATH=$(realpath "$(dirname "$temp_dir")/allure-report.tar.gz")" >> allure_report_env
+            # Set the path of Allure report archive as output
+            echo "::set-output name=allure_report_archive::$(realpath "$(dirname "$temp_dir")/allure-report.tar.gz")"
             
-            # Set the environment file as an artifact
-            echo "allure_report_env" >> allure_report_env.txt
+            # Set the environment variable for the archive path
+            export ALLURE_REPORT_ARCHIVE=$(realpath "$(dirname "$temp_dir")/allure-report.tar.gz")
+            echo "ALLURE_REPORT_ARCHIVE=$ALLURE_REPORT_ARCHIVE" >> $GITHUB_ENV
             
             # Check if tar was generated successfully
             if [ $? -eq 0 ]; then
@@ -70,32 +71,15 @@ jobs:
             echo "Allure directory not found or is empty."
           fi
 
-      - name: Upload Allure report environment file
-        uses: actions/upload-artifact@v2
-        with:
-          name: allure-report-env
-          path: allure_report.tar.gz
-
       - name: Retrieve and extract Allure report artifact
         uses: actions/download-artifact@v2
         with:
-          name: allure-report-env
-
-      - name: List contents of the downloaded artifact
-        run: |
-          ls -la /home/runner/work/playwright_boilerplate_pytest_bdd/playwright_boilerplate_pytest_bdd/allure-report-env        
-
-      - name: Source environment file
-        run: source allure-report-env          
-
-      # - name: Read environment file and set variables
-      #   run: |
-      #     source /home/runner/work/playwright_boilerplate_pytest_bdd/playwright_boilerplate_pytest_bdd/allure-report-env
-      #     export ALLURE_REPORT_ARCHIVE=$ALLURE_REPORT_ARCHIVE_PATH
+          name: allure-report
+          path: ${{ steps.set-allure-archive-path.outputs.allure_report_archive }}
 
       - name: Generate Allure report
         run: |
-          cd $ALLURE_REPORT_ARCHIVE_PATH/allure-report
+          cd ${{ steps.set-allure-archive-path.outputs.allure_report_archive }}/allure-report
           allure generate --clean
 
       - name: Deploy to Netlify
