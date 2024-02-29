@@ -90,6 +90,13 @@ jobs:
           name: allure-report
           path: allure-report
 
+      - name: Install Allure CLI
+        run: |
+          wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.17.0/allure-commandline-2.17.0.zip -O allure.zip
+          unzip allure.zip -d allure
+          sudo mv allure/bin/allure /usr/local/bin/
+          allure --version  # Verify installation
+
       - name: Generate Allure report
         run: |
           cd allure-report
