@@ -81,10 +81,13 @@ jobs:
         with:
           name: allure-report-env
 
-      - name: Read environment file and set variables
-        run: |
-          source /home/runner/work/playwright_boilerplate_pytest_bdd/playwright_boilerplate_pytest_bdd/allure-report-env
-          export ALLURE_REPORT_ARCHIVE=$ALLURE_REPORT_ARCHIVE_PATH
+      - name: Source environment file
+        run: source allure-report-env          
+
+      # - name: Read environment file and set variables
+      #   run: |
+      #     source /home/runner/work/playwright_boilerplate_pytest_bdd/playwright_boilerplate_pytest_bdd/allure-report-env
+      #     export ALLURE_REPORT_ARCHIVE=$ALLURE_REPORT_ARCHIVE_PATH
 
       - name: Generate Allure report
         run: |
