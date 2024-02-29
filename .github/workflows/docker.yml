@@ -102,11 +102,12 @@ jobs:
         run: |
           ls -l allure-report         
 
-      - name: Build test report
-        uses: simple-elf/allure-report-action@v1.7
-        with:
-          allure_history: allure-report/history
-          allure_results: allure-report
+      - name: Start Python server
+        run: |
+          cd allure-report
+          python3 -m http.server 8000 > server.log 2>&1 &
+
+
 
       - name: Deploy to Netlify
         run: |
