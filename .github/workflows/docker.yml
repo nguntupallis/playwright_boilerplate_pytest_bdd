@@ -68,26 +68,25 @@ jobs:
             echo "Allure directory not found or is empty."
           fi
 
-
       - name: Retrieve and extract Allure report artifact
         uses: actions/download-artifact@v2
         with:
           name: allure-report
-          path: $(pwd)/allure-report
+          path: ${{ env.ALLURE_REPORT_ARCHIVE }}
 
       - name: Generate Allure report
         run: |
-          cd $(pwd)/allure-report
-          # Replace this command with the actual command to generate the Allure report
+          cd ${{ env.ALLURE_REPORT_ARCHIVE }}/allure-report
           allure generate --clean
-          
+
       - name: Deploy to Netlify
         run: |
           npm install -g netlify-cli  # Install Netlify CLI
-          cd $(pwd)/allure-report
+          cd ${{ env.ALLURE_REPORT_ARCHIVE }}/allure-report
           netlify deploy --prod --dir . --message "Deploy from GitHub Actions"
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}          
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+    
        
 
       # - name: Start Python HTTP server
