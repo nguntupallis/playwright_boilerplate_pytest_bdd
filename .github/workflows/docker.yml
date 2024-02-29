@@ -83,8 +83,7 @@ jobs:
 
       - name: List contents of the downloaded artifact
         run: |
-          cd ${{ github.workspace }}
-          ls -la allure-report-env          
+          ls -la /home/runner/work/playwright_boilerplate_pytest_bdd/playwright_boilerplate_pytest_bdd/allure-report-env        
 
       - name: Source environment file
         run: source allure-report-env          
