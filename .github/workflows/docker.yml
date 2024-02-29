@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: allure-report-env
-          path: allure_report_env.txt
+          path: allure_report.tar.gz
 
       - name: Retrieve and extract Allure report artifact
         uses: actions/download-artifact@v2
