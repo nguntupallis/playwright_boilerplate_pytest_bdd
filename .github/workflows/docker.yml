@@ -64,6 +64,12 @@ jobs:
             # Check if tar was generated successfully
             if [ $? -eq 0 ]; then
               echo "Tar archive generated successfully."
+
+              # Echo the path of the tar file
+              echo "Path of the tar file: $ALLURE_REPORT_ARCHIVE"
+        
+              # List the contents of the tar file
+              tar -tf "$ALLURE_REPORT_ARCHIVE"
             else
               echo "Failed to generate tar archive."
             fi
