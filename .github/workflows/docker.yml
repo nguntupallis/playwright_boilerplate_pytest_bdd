@@ -90,6 +90,18 @@ jobs:
           name: allure-report
           path: allure-report
 
+      - name: List contents of the downloaded artifact
+        run: |
+          ls -l allure-report
+
+      - name: Unzip the tar file
+        run: |
+          tar -xzvf allure-report/allure-report.tar.gz -C allure-report
+
+      - name: List contents after unzipping
+        run: |
+          ls -l allure-report          
+
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
         with:
