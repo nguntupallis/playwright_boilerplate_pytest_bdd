@@ -105,13 +105,13 @@ jobs:
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
         with:
-          allure_history: allure-report/allure-report/allure-history
-          allure_results: allure-report/allure-report/allure-report 
+          allure_history: allure-report/history
+          allure_results: allure-report/allure-results
 
       - name: Deploy to Netlify
         run: |
           npm install -g netlify-cli  # Install Netlify CLI
-          cd allure-report
+          cd allure-report/allure-results
           netlify deploy --prod --dir . --message "Deploy from GitHub Actions"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
