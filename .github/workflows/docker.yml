@@ -92,7 +92,7 @@ jobs:
 
       - name: Generate Allure report
         run: |
-          cd ${{ steps.set-allure-archive-path.outputs.allure_report_archive }}/allure-report
+          cd allure-report
           allure generate --clean
 
       - name: Deploy to Netlify
