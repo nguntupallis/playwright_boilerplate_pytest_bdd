@@ -48,14 +48,9 @@ This is a boilerplate project for setting up and running end-to-end tests using 
     # For Linux
     apt-get update && apt-get install -y allure
 
-    # Set the password, headless mode, test environment, and browser variables
-    $env:PASSWORD = "YourPasswordHere"; $env:HEADLESS_MODE = "false"; $env:TEST_ENVIRONMENT= "qa"; $env:BROWSER= "chrome"
-
-    # Run the tests
-    tox
+    # Set the password, headless mode, test environment, and browser variables and run the tests 
+    $env:PASSWORD = "YourPasswordHere"; $env:HEADLESS_MODE = "false"; $env:TEST_ENVIRONMENT= "qa"; $env:BROWSER= "chrome" tox
     ```
-
-
 ### Configuration
 
 - Modify the `pytest.ini` file to configure Pytest options and plugins.
