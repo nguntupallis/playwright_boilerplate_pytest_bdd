@@ -21,7 +21,7 @@ This is a boilerplate project for setting up and running end-to-end tests using 
 1. Clone this repository:
 
   ```bash
-  git clone [https://github.com/nguntupallis/playwright_pytest_bdd_boilerplate.git](https://github.com/nguntupallis/playwright_pytest_bdd_boilerplate.git)
+  git clone https://github.com/nguntupallis/playwright_pytest_bdd_boilerplate.git
   ```
 2. Navigate to the project directory:
 
