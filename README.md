@@ -64,6 +64,10 @@ This is a boilerplate project for setting up and running end-to-end tests using 
 - pages
 - Docker
 
+### Test Run Report
+
+The latest test run report can be found [here](https://symphonious-gecko-893221.netlify.app/)
+
 ## Contributing
 
 Contributions are welcome! If you have suggestions, improvements, or new features to add, feel free to open an issue or submit a pull request.
