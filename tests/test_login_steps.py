@@ -57,7 +57,7 @@ def provide_credentials(username, password, shared_data):
         clear_username()
         enter_username(username)
     elif "long_username" in username:   
-        username = generate_random_string(65) + "nhs.net"
+        username = generate_random_string(65) + ".net"
         enter_username(username)
         enter_password(password)
     elif "long_password" in password:   

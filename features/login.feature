@@ -4,7 +4,7 @@ Feature: Login Feature
     Given I access the internet web app
     Then the login button should be visible
 
- Scenario: NHS sign in page should be visible
+ Scenario: Sign in page should be visible
     Given I access the internet web app
     When I click on the log in button
     Then your username is invalid alert should be visible
