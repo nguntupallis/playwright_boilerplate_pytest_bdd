@@ -21,7 +21,7 @@ This is a boilerplate project for setting up and running end-to-end tests using 
 1. Clone this repository:
 
   ```bash
-  git clone [https://github.com/nguntupallis/playwright_pytest_bdd_boilerplate.git](https://github.com/nguntupallis/playwright_pytest_bdd_boilerplate.git)
+  git clone https://github.com/nguntupallis/playwright_pytest_bdd_boilerplate.git
   ```
 2. Navigate to the project directory:
 
@@ -48,14 +48,9 @@ This is a boilerplate project for setting up and running end-to-end tests using 
     # For Linux
     apt-get update && apt-get install -y allure
 
-    # Set the password, headless mode, test environment, and browser variables
-    $env:PASSWORD = "YourPasswordHere"; $env:HEADLESS_MODE = "false"; $env:TEST_ENVIRONMENT= "qa"; $env:BROWSER= "chrome"
-
-    # Run the tests
-    tox
+    # Set the password, headless mode, test environment, and browser variables and run the tests 
+    $env:PASSWORD = "YourPasswordHere"; $env:HEADLESS_MODE = "false"; $env:TEST_ENVIRONMENT= "qa"; $env:BROWSER= "chrome" tox
     ```
-
-
 ### Configuration
 
 - Modify the `pytest.ini` file to configure Pytest options and plugins.
@@ -68,6 +63,10 @@ This is a boilerplate project for setting up and running end-to-end tests using 
 - helpers
 - pages
 - Docker
+
+### Test Run Report
+
+The latest test run report can be found [here](https://symphonious-gecko-893221.netlify.app/)
 
 ## Contributing
 
