@@ -2,7 +2,7 @@ from asyncio import sleep
 import secrets
 import string
 from pytest_bdd import given, when, then, scenarios, scenario
-from pytest_bdd.parsers import parse, cfparse
+from pytest_bdd.parsers import parse
 from pages.login_page import *
 import logging
 from init_helpers import *
@@ -25,9 +25,20 @@ scenarios(f'{features_directory}/login.feature')
 def shared_data():
     return {}
 
-@pytest.mark.login
+@scenario(f'{features_directory}/login.feature', 'Login button is visible')
+def test_login_button_is_visible():
+    pass
+
+@scenario(f'{features_directory}/login.feature', 'Sign in page should be visible')
+def test_sign_in_page_is_visible():
+    pass
+
+@scenario(f'{features_directory}/login.feature', 'Sign in should pass or fail based on credentials provided')
+def test_sign_in_should_status():
+    pass
+
 @given("I access the internet web app")
-def given_I_access_the_ravs_web_app(navigate_to_internet):
+def given_I_access_the_internet_web_app(navigate_to_internet):
     pass
 
 @then("the login button should be visible")
@@ -45,7 +56,7 @@ def step_click_login_button():
 def username_is_invalid_visible():
     assert check_username_is_invalid_alert_exists() is True, "Username is invalid alert exists"
 
-@when(cfparse("I provide the {username} and {password}"))
+@when(parse("I provide the {username} and {password}"))
 @when("I provide the <username> and <password>")
 def provide_credentials(username, password, shared_data):
     if username == "None":

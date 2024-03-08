@@ -10,7 +10,7 @@ Feature: Login Feature
     Then your username is invalid alert should be visible
 
 @login 
- Scenario: Sign in should <status> based on credentials provided
+ Scenario: Sign in should pass or fail based on credentials provided
    Given I access the internet web app
    When I provide the <username> and <password>
    And the login button is clicked
