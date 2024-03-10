@@ -76,6 +76,9 @@ def get_app_url(test_environment):
 def navigate_to_url(url):
     playwright_helper_instance.navigate_to_url(url)
 
+def get_browser_version():
+    return playwright_helper_instance.get_browser_version()
+
 def get_current_url():
     return playwright_helper_instance.get_current_url()
 

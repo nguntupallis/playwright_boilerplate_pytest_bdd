@@ -3,6 +3,9 @@ from pages.login_page import *
 from pages.home_page import *
 from init_helpers import *
 from datetime import datetime, timedelta
+import allure
+from allure_commons._core import plugin_manager
+from allure_pytest.listener import AllureListener
 
 pytest.mark.login = pytest.mark.mark(login=True)
 pytest.mark.logout = pytest.mark.mark(logout=True)
@@ -16,6 +19,11 @@ def navigate_and_login(request, navigate_to_internet):
     password = config["credentials"]["password"]
     enter_password(password)
     click_login_button()
+
+@pytest.fixture(scope='session', autouse=True)
+def report_browser_version():
+    browser_version = get_browser_version()
+    allure.dynamic.parameter("Browser Version", browser_version)
 
 pytest.mark.login
 @pytest.fixture(scope='function')

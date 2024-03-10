@@ -27,7 +27,10 @@ def shared_data():
 
 @scenario(f'{features_directory}/login.feature', 'Login button is visible')
 def test_login_button_is_visible():
-    pass
+    browser_version = get_browser_version()
+    allure.dynamic.parameter("Browser Version", browser_version)
+    print(f"Browser Version: {browser_version}")
+    print("test")
 
 @scenario(f'{features_directory}/login.feature', 'Sign in page should be visible')
 def test_sign_in_page_is_visible():
@@ -39,7 +42,10 @@ def test_sign_in_should_status():
 
 @given("I access the internet web app")
 def given_I_access_the_internet_web_app(navigate_to_internet):
-    pass
+    browser_version = get_browser_version()
+    allure.dynamic.title("Browser Version" + browser_version)
+    print(f"Browser Version: {browser_version}")
+    print("test")
 
 @then("the login button should be visible")
 def then_the_login_button_should_be_visible():

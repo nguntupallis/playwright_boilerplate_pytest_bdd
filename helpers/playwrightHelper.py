@@ -1,3 +1,4 @@
+from collections import defaultdict
 from playwright.sync_api import sync_playwright
 from axe_core_python.sync_playwright import Axe
 from init_helpers import *
@@ -16,6 +17,7 @@ class BasePlaywrightHelper:
         self.browser = None
         self.context = None
         self.page = None
+        self.browser_versions = defaultdict(str)
         
     def launch_chromium(self, headless_mode):
         try:
@@ -25,12 +27,36 @@ class BasePlaywrightHelper:
         except Exception as e:
             print(f"Error launching Chromium: {e}")
 
+    def launch_edge(self, headless_mode):
+        try:
+            self.browser = self.playwright.chromium.launch(channel="msedge", headless=headless_mode)
+            self.context = self.browser.new_context()
+            self.page = self.context.new_page()
+        except Exception as e:
+            print(f"Error launching Chromium: {e}")
+
+    def launch_chrome(self, headless_mode):
+        try:
+            self.browser = self.playwright.chromium.launch(channel="chrome", headless=headless_mode)
+            self.context = self.browser.new_context()
+            self.page = self.context.new_page()
+        except Exception as e:
+            print(f"Error launching Chromium: {e}")
+
     def launch_firefox(self, headless_mode):
         try:
             self.browser = self.playwright.firefox.launch(headless=headless_mode)
             self.page = self.browser.new_page()
+            self.context = self.browser.new_context()
         except Exception as e:
             print(f"Error launching Firefox: {e}")
+
+    def get_browser_version(self):
+        if self.browser:
+            print(self.browser.version)
+            return self.browser.version
+        else:
+            return None
 
     def close_browser(self):
         if self.context:
@@ -148,11 +174,14 @@ class PlaywrightHelper(BasePlaywrightHelper):
         try:
             browser_name = config["browser"].lower()
             headless_mode = config["headless_mode"].lower() == "true"
-            if browser_name in ["chromium", "chrome"]:
+            if browser_name == "chromium":
                 self.launch_chromium(headless_mode)
+            if browser_name == "chrome":
+                self.launch_chrome(headless_mode)
             elif browser_name == "firefox":
-
                 self.launch_firefox(headless_mode)
+            elif browser_name == "edge":
+                self.launch_edge(headless_mode)
             else:
                 print(f"Unsupported browser: {browser_name}")
         except Exception as e:
