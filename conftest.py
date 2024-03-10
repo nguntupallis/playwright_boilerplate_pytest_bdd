@@ -24,7 +24,7 @@ def navigate_and_login(request, navigate_to_internet):
     enter_password(password)
     click_login_button()
 
-@pytest.fixture(scope='session', autouse=True)
+@pytest.fixture(scope='module', autouse=True)
 def report_browser_version(request):
     browser_version = get_browser_version()
     allure.dynamic.label(LabelType.TAG, browser_version)
