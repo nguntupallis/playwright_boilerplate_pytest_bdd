@@ -50,12 +50,15 @@ def given_I_access_the_internet_web_app(navigate_to_internet):
 @then("the login button should be visible")
 def then_the_login_button_should_be_visible():
     if check_login_button_exists():
-        assert True, "Login button is visible"
+        attach_screenshot("expected_login_button_is_visible.png")
+        assert True, "Login button is visible"        
     else:
+        attach_screenshot("expected_login_button_is_not_visible.png")
         assert False, "Login button is not visible"
 
 @when('I click on the log in button')
 def step_click_login_button():
+    attach_screenshot("before_the_login_button_is_clicked.png")
     click_login_button()
 
 @then('your username is invalid alert should be visible')
@@ -96,11 +99,13 @@ def provide_credentials(username, password, shared_data):
 
 @when("the login button is clicked")
 def click_login():
+    attach_screenshot("before_the_login_button_is_clicked.png")
     click_login_button()
 
 @then(parse("login should succeed - {status}"))
 @then("login should succeed - <status>")
 def verify_signin_status(status, shared_data):
+    attach_screenshot("the_login_button_is_clicked.png")
     data = shared_data
     if status.lower() == "fail":
         if data['password'] == "None" and "valid" not in data["username"].lower():

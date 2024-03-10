@@ -3,6 +3,8 @@ from helpers.apiHelper import ApiHelper
 from helpers.datetimeHelper import DatetimeHelper
 from helpers.playwrightHelper import PlaywrightHelper
 import pytest
+from playwright.sync_api import sync_playwright
+import allure
 
 playwright_helper_instance = None
 api_helper = None
@@ -19,6 +21,13 @@ def get_working_directory():
         working_dir = os.path.join(os.getcwd(), "")
     print("Working directory is : " + working_dir)
     return working_dir
+
+def get_mobile_devices():
+    with sync_playwright() as p:
+        return {
+            "iPhone_12": p.devices["iPhone 12"],
+            "Pixel_5": p.devices["Pixel 5"]
+        }
 
 def initialize_helpers():
     global api_helper, datetime_helper, playwright_helper_instance, config
@@ -39,6 +48,7 @@ def load_config_from_env():
         "test_environment": os.environ.get("TEST_ENVIRONMENT", "qa"),
         "headless_mode": os.environ.get("HEADLESS_MODE",""),
         "browser": os.environ.get("BROWSER", "chrome"),
+        "device": os.environ.get("DEVICE", "iphone"),
         "timeout_seconds": int(os.environ.get("TIMEOUT_SECONDS", 10)),
         "credentials": {
             "password": os.environ.get("PASSWORD", "")
@@ -46,8 +56,13 @@ def load_config_from_env():
     }
     return config      
 
+def attach_screenshot(filename):
+    screenshot = capture_screenshot(filename)
+    allure.attach.file(screenshot, name=f"Before {filename}", attachment_type=allure.attachment_type.PNG)
+
 config = load_config_from_env()
-print(config)
+
+mobile_devices = get_mobile_devices()
 
 @pytest.fixture(scope="session", autouse=True)
 def initialize_session():
@@ -90,6 +105,9 @@ def check_element_exists(element, wait=False):
 
 def clear_element(element):
     return playwright_helper_instance.clear_element(element)
+
+def capture_screenshot(filename):
+    return playwright_helper_instance.capture_screenshot(filename)
 
 def find_element_and_perform_action(element, action, inputValue=None):
     return playwright_helper_instance.find_element_and_perform_action(element, action, inputValue)

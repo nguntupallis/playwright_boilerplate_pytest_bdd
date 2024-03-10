@@ -18,7 +18,7 @@ class BasePlaywrightHelper:
         self.context = None
         self.page = None
         self.browser_versions = defaultdict(str)
-        
+       
     def launch_chromium(self, headless_mode):
         try:
             self.browser = self.playwright.chromium.launch(headless=headless_mode)
@@ -50,6 +50,26 @@ class BasePlaywrightHelper:
             self.context = self.browser.new_context()
         except Exception as e:
             print(f"Error launching Firefox: {e}")
+
+    def launch_mobile_browser(self, device_name, headless_mode):
+        ua_string_android = 'Mozilla/5.0 (Android 14; Mobile; rv:68.0) Gecko/68.0 Firefox/123.0'
+        ua_string_iphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Mobile/15E148 Safari/604.1'
+        
+        try:
+            browser_type = self.playwright.chromium if device_name.lower() == "android" else self.playwright.webkit
+            device = self.playwright.devices["Pixel 5"] if device_name.lower() == "android" else self.playwright.devices["iPhone 12"]
+            ua_string = ua_string_android if device_name.lower() == "android" else ua_string_iphone
+            
+            self.browser = browser_type.launch(headless=headless_mode)
+            self.context = self.browser.new_context(user_agent=ua_string)
+            self.page = self.context.new_page()
+        except Exception as e:
+            print(f"Error launching mobile browser for {device_name}: {e}")
+
+    def capture_screenshot(self, filename):
+        screenshot_path = os.path.join(self.screenshots_dir, f'before_action_{filename}.png')
+        self.page.screenshot(path=screenshot_path)
+        return screenshot_path
 
     def get_browser_version(self):
         if self.browser:
@@ -182,6 +202,8 @@ class PlaywrightHelper(BasePlaywrightHelper):
                 self.launch_firefox(headless_mode)
             elif browser_name == "edge":
                 self.launch_edge(headless_mode)
+            elif browser_name == "mobile":
+                self.launch_mobile_browser(config["device"], headless_mode)
             else:
                 print(f"Unsupported browser: {browser_name}")
         except Exception as e:

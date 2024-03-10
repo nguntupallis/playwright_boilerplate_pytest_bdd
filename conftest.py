@@ -1,3 +1,4 @@
+import logging
 import pytest
 from pages.login_page import *
 from pages.home_page import *
@@ -6,6 +7,9 @@ from datetime import datetime, timedelta
 import allure
 from allure_commons._core import plugin_manager
 from allure_pytest.listener import AllureListener
+from allure_commons.types import LabelType
+
+logging.basicConfig(level=logging.INFO)
 
 pytest.mark.login = pytest.mark.mark(login=True)
 pytest.mark.logout = pytest.mark.mark(logout=True)
@@ -21,9 +25,10 @@ def navigate_and_login(request, navigate_to_internet):
     click_login_button()
 
 @pytest.fixture(scope='session', autouse=True)
-def report_browser_version():
+def report_browser_version(request):
     browser_version = get_browser_version()
-    allure.dynamic.parameter("Browser Version", browser_version)
+    allure.dynamic.label(LabelType.TAG, browser_version)
+    logging.info(config["browser"].upper() + f" browser version is : {browser_version}")
 
 pytest.mark.login
 @pytest.fixture(scope='function')
