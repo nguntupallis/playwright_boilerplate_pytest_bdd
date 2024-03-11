@@ -29,11 +29,19 @@ class BasePlaywrightHelper:
 
     def launch_edge(self, headless_mode):
         try:
-            self.browser = self.playwright.chromium.launch(channel="msedge", headless=headless_mode)
+            self.browser = self.playwright.chromium.launch(channel="msedge",headless=headless_mode)
             self.context = self.browser.new_context()
             self.page = self.context.new_page()
         except Exception as e:
-            print(f"Error launching Chromium: {e}")
+                print(f"Error launching Edge: {e}")
+
+    def launch_safari(self, headless_mode):
+        try:
+            self.browser = self.playwright.webkit.launch(headless=headless_mode)
+            self.context = self.browser.new_context()
+            self.page = self.context.new_page()
+        except Exception as e:
+                print(f"Error launching Edge: {e}")
 
     def launch_chrome(self, headless_mode):
         try:
@@ -41,7 +49,7 @@ class BasePlaywrightHelper:
             self.context = self.browser.new_context()
             self.page = self.context.new_page()
         except Exception as e:
-            print(f"Error launching Chromium: {e}")
+            print(f"Error launching Safari: {e}")
 
     def launch_firefox(self, headless_mode):
         try:
@@ -200,7 +208,9 @@ class PlaywrightHelper(BasePlaywrightHelper):
                 self.launch_chrome(headless_mode)
             elif browser_name == "firefox":
                 self.launch_firefox(headless_mode)
-            elif browser_name == "edge":
+            elif browser_name == "safari":
+                self.launch_safari(headless_mode)
+            elif "edge" in browser_name:
                 self.launch_edge(headless_mode)
             elif browser_name == "mobile":
                 self.launch_mobile_browser(config["device"], headless_mode)

@@ -13,6 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt \
     && pip install tox \
     && pip install playwright \
     && playwright install \ 
+    &&  playwright install --force chrome \
+    &&  playwright install --force msedge \
     && playwright install-deps \
     && curl -o allure-commandline-2.17.3.tgz -Ls https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.17.3/allure-commandline-2.17.3.tgz \
     && tar -zxvf allure-commandline-2.17.3.tgz -C /opt/ \

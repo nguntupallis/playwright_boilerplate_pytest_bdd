@@ -47,7 +47,7 @@ def load_config_from_env():
     config = {
         "test_environment": os.environ.get("TEST_ENVIRONMENT", "qa"),
         "headless_mode": os.environ.get("HEADLESS_MODE",""),
-        "browser": os.environ.get("BROWSER", "chrome"),
+        "browser": os.environ.get("BROWSER", "edge"),
         "device": os.environ.get("DEVICE", "iphone"),
         "timeout_seconds": int(os.environ.get("TIMEOUT_SECONDS", 10)),
         "credentials": {
