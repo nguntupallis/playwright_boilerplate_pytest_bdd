@@ -28,7 +28,10 @@ def navigate_and_login(request, navigate_to_internet):
 def report_browser_version(request):
     browser_version = get_browser_version()
     allure.dynamic.label(LabelType.TAG, browser_version)
-    logging.info(config["browser"].upper() + f" browser version is : {browser_version}")
+    if config["browser"] == "mobile":
+        logging.info(config["browser"].upper() + f" browser version for " + config["device"] + f" is : {browser_version}")
+    else:
+        logging.info(config["browser"].upper() + f" browser version is : {browser_version}")
 
 pytest.mark.login
 @pytest.fixture(scope='function')
