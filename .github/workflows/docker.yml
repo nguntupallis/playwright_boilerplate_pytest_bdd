@@ -30,7 +30,7 @@ jobs:
             -e PASSWORD="${{ secrets.PASSWORD }}" \
             -e HEADLESS_MODE="true" \
             -e TEST_ENVIRONMENT="qa" \
-            -e BROWSER="chrome" \
+            -e BROWSER="chromium" \
             -e DEVICE="" \
             -p 5050:5050 \
             playwright-tests
