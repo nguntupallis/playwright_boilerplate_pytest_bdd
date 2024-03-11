@@ -27,3 +27,4 @@ COPY . .
 
 # Update the entrypoint to start both Allure server and tox
 ENTRYPOINT ["tox"]
+# ENTRYPOINT [ "bash" ]
