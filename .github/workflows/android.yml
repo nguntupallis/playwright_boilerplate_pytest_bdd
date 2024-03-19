@@ -119,6 +119,7 @@ jobs:
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
+          ignore_cert: true
           server_port: 587
           username: neelima.guntupalli@airelogic.com
           password: ${{ secrets.GOOG_PASS }}
