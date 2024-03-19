@@ -127,6 +127,8 @@ jobs:
           subject: "E2E Test Results: GitHub Actions Workflow on branch ${{ github.ref }}"
           body: "Your E2E tests have completed. Please find the test reports attached."
           attachments: allure-report/index.html
+          rejectUnauthorized: false
         env:
           ALLURE_REPORT_ARCHIVE: /tmp/allure-report.tar.gz
+
 
