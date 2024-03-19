@@ -114,3 +114,14 @@ jobs:
           netlify deploy --prod --dir . --message "Deploy from GitHub Actions" --site ${{ secrets.NETLIFY_SITE_ID }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+      - name: Send Email on Test Completion
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: neelima.guntupalli@airelogic.com
+          password: ${{ secrets.GOOG_PASS }}
+          subject: "E2E Test Results: GitHub Actions Workflow on branch ${{ github.ref }}"
+          body: "Your E2E tests have completed. Please find the test reports attached."
+          attachments: allure-report/allure-report.tar.gz
