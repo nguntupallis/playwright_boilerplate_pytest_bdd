@@ -122,6 +122,11 @@ jobs:
           server_port: 587
           username: neelima.guntupalli@airelogic.com
           password: ${{ secrets.GOOG_PASS }}
+          from: neelima.guntupalli@airelogic.com
+          to: neelima.guntupalli1@nhs.net, neelima.guntupalli12@nhs.net
           subject: "E2E Test Results: GitHub Actions Workflow on branch ${{ github.ref }}"
           body: "Your E2E tests have completed. Please find the test reports attached."
-          attachments: allure-report/allure-report.tar.gz
+          attachments: allure-report/index.html
+        env:
+          ALLURE_REPORT_ARCHIVE: /tmp/allure-report.tar.gz
+
