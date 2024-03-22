@@ -34,28 +34,6 @@ This is a boilerplate project for setting up and running end-to-end tests using 
   ```bash
   pip install -r requirements.txt
   ```
-### Usage
-
-1. Write your feature files using Gherkin syntax in the `features` directory.
-2. Implement your step definitions in the `steps` directory using Python.
-3. Obtain the password from [https://the-internet.herokuapp.com/login](https://the-internet.herokuapp.com/login) and replace `YourPasswordHere` with it in the setting variables command below.
-4. Run the tests using the following command:
-
-    ```bash
-    # For Windows
-    scoop install allure
-
-    # For Linux
-    apt-get update && apt-get install -y allure
-
-    # Set the password, headless mode, test environment, and browser variables and run the tests 
-    $env:PASSWORD = "YourPasswordHere"; $env:HEADLESS_MODE = "false"; $env:TEST_ENVIRONMENT= "qa"; $env:BROWSER= "chrome" tox
-    ```
-### Configuration
-
-- Modify the `pytest.ini` file to configure Pytest options and plugins.
-- Update the `tox.ini` file to define the test environments and configurations.
-
 ## Docker
 
 ### Build Docker Image
@@ -79,6 +57,30 @@ docker run -it -p 5050:5050 \
   your_docker_image_name
 ```
 Replace your_docker_image_name with the desired name for your Docker image. This command will run the Docker container with the specified environment variables, including the password, headless mode, test environment, browser, and device configuration.
+
+### Usage
+
+1. Write your feature files using Gherkin syntax in the `features` directory.
+2. Implement your step definitions in the `steps` directory using Python.
+3. Obtain the password from [https://the-internet.herokuapp.com/login](https://the-internet.herokuapp.com/login) and replace `YourPasswordHere` with it in the setting variables command below.
+4. Run the tests using the following command:
+
+    ```bash
+    # For Windows
+    scoop install allure
+
+    # For Linux
+    apt-get update && apt-get install -y allure
+
+    # Set the password, headless mode, test environment, and browser variables and run the tests 
+    $env:PASSWORD = "YourPasswordHere"; $env:HEADLESS_MODE = "false"; $env:TEST_ENVIRONMENT= "qa"; $env:BROWSER= "chrome" tox
+    ```
+### Configuration
+
+- Modify the `pytest.ini` file to configure Pytest options and plugins.
+- Update the `tox.ini` file to define the test environments and configurations.
+
+
 
 ### Folder Structure
 - features
