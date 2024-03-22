@@ -90,8 +90,7 @@ Replace your_docker_image_name with the desired name for your Docker image. This
 
 ### Test Run Report
 
-The latest test run report can be found [here]([[https://symphonious-gecko-893221.netlify.app](https://stellar-cobbler-6334cd.netlify.app/)]
-
+The latest test run report can be found [[here](https://stellar-cobbler-6334cd.netlify.app/)]
 ## Contributing
 
 Contributions are welcome! If you have suggestions, improvements, or new features to add, feel free to open an issue or submit a pull request.
