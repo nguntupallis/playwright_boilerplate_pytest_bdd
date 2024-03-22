@@ -56,6 +56,30 @@ This is a boilerplate project for setting up and running end-to-end tests using 
 - Modify the `pytest.ini` file to configure Pytest options and plugins.
 - Update the `tox.ini` file to define the test environments and configurations.
 
+## Docker
+
+### Build Docker Image
+
+Build the Docker image using the following command:
+
+```bash
+docker build -t your_docker_image_name -f Docker/tests.dockerfile .
+```
+### Run Docker Container
+
+Run the Docker container using the following command:
+
+```bash
+docker run -it -p 5050:5050 \
+  -e PASSWORD=$env:PASSWORD \
+  -e HEADLESS_MODE="true" \
+  -e TEST_ENVIRONMENT="qa" \
+  -e BROWSER="mobile" \
+  -e DEVICE="android" \
+  your_docker_image_name
+```
+Replace your_docker_image_name with the desired name for your Docker image. This command will run the Docker container with the specified environment variables, including the password, headless mode, test environment, browser, and device configuration.
+
 ### Folder Structure
 - features
 - steps
