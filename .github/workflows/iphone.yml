@@ -31,7 +31,7 @@ jobs:
             -e HEADLESS_MODE="true" \
             -e TEST_ENVIRONMENT="qa" \
             -e BROWSER="mobile" \
-            -e DEVICE="iphone" \
+            -e DEVICE="iphone_12" \
             -p 5050:5050 \
             playwright-tests
           sleep 30
