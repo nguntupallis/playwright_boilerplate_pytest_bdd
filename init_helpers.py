@@ -26,8 +26,11 @@ def get_mobile_devices():
     with sync_playwright() as p:
         return {
             "iPhone_12": p.devices["iPhone 12"],
-            "Pixel_5": p.devices["Pixel 5"]
+            "iPhone_11": p.devices["iPhone 11"],
+            "Pixel_5": p.devices["Pixel 5"],
+            "Pixel_4": p.devices["Pixel 4"]
         }
+
 
 def initialize_helpers():
     global api_helper, datetime_helper, playwright_helper_instance, config
