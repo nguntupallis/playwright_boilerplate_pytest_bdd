@@ -34,7 +34,15 @@ jobs:
             -e DEVICE="Pixel_5" \
             -p 5050:5050 \
             playwright-tests
-          sleep 30
+          while true; do
+            if docker logs playwright-tests 2>&1 | grep -q "Server started"; then
+              echo "Allure report server started successfully."
+              break
+            else
+              echo "Waiting for the allure report server to start..."
+              sleep 5
+            fi
+          done
 
       - name: Find Allure report directory
         run: |
